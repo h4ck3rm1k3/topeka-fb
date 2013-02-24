@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="clearfix" id="samples">
+      <h1>Local Lookup</h1>
+      <div class="list">
+        <h3>A few of your locations</h3>
+        <ul class="locations">{% for location in local.data %}
+        <li>
+          <a href="#" onclick="window.open('http://www.facebook.com/{{location.id}}')">
+            <img src="https://graph.facebook.com/{{location.id}}/picture" alt="{{location.name}}">
+            {{location.name}}
+          </a>
+        </li>{% endfor %}</ul>
+      </div>
+</section>
+{% endblock%}
