@@ -160,6 +160,18 @@ def get_token():
         return token
 
 
+@app.route('/local', methods=['GET', 'POST'])
+def local():
+    access_token = get_token()
+    if access_token:
+        me = fb_call('search', args={
+                'access_token': access_token,
+                'type'  : 'place',
+                'center' : '39.0483,-95.6778',
+                'distance': 1000
+                })
+
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     # print get_home()
