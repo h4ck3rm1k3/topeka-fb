@@ -120,15 +120,8 @@
         <h3>locations near topeka</h3>
         <ul class="locations">{% for location in local %}
 
-	  {% if location.liked   %}
-          liked
-	  {% else %}
-	  not like
-	  {% endif  %}
-
-	  {% if location.online   %}    online  {% endif  %}
-	  
-        <li>
+	  {% if not  location.liked   %}
+          <li>
           <a href="http://www.facebook.com/{{location.id}}">
             <img src="https://graph.facebook.com/{{location.id}}/picture" alt="{{location.name}}">
             {{location.name}} 
@@ -137,22 +130,9 @@
             {{location.location.street}}( {{location.location.latitude}}, {{location.location.longitude}})
 	  {% endif  %}
           </a>
-        </li>{% endfor %}</ul>
-      </div>
-
-
-
-
-      <h1>Like Lookup</h1>
-      <div class="list">
-        <h3>your likes</h3>
-        <ul class="likes">{% for id,name in likes.items() %}
-        <li>
-          <a href="http://www.facebook.com/{{id}}">
-            <img src="https://graph.facebook.com/{{id}}/picture">
-            {{name}} 
-          </a>
-        </li>{% endfor %}</ul>
+          </li>
+	  {% endif  %} 
+{% endfor %}</ul>
       </div>
 
 
