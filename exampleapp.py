@@ -197,12 +197,16 @@ def local():
                 'center' : '39.0483,-95.6778',
                 'distance': 1000
                 })                    
+        for d in local:
+            d['online']=1
+
     else:
         local = get_all('search', {  'type'  : 'page',   'q' : 'Topeka, Kansas' })
         likes["105509059482760"]= 1
         likes['5530982975']=1
         likes['20533939143']=1
         likes['112136275468553']=1
+
     for d in local:
         if d['id'] in likes :
             d['liked']=1
