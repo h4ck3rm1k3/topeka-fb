@@ -220,7 +220,9 @@ def local():
         else:
             d['liked']=0
 
-    return render_template('local.html', app_id=FB_APP_ID, token=access_token, local=local, likes=likes, me=me, name=FB_APP_NAME)
+    fb_app = fb_call(FB_APP_ID, args={'access_token': access_token})
+
+    return render_template('local.html', app=fb_app, app_id=FB_APP_ID, token=access_token, local=local, likes=likes, me=me, name=FB_APP_NAME)
     
 
 
