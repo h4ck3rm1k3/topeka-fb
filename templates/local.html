@@ -118,12 +118,22 @@
       <h1>Local Lookup</h1>
       <div class="list">
         <h3>A few of your locations</h3>
-        <ul class="locations">{% for location in local.data %}
+        <ul class="locations">{% for location in local %}
+
+	  {% if location.liked   %}
+          liked
+	  {% else %}
+	  not like
+	  {% endif  %}
+	  
         <li>
-          <a href="#" onclick="window.open('http://www.facebook.com/{{location.id}}')">
+          <a href="http://www.facebook.com/{{location.id}}">
             <img src="https://graph.facebook.com/{{location.id}}/picture" alt="{{location.name}}">
-            {{location.name}}
+            {{location.name}} 
+            count :{{location.count}}
+	  {% if  location.location  %}
             {{location.location.street}}( {{location.location.latitude}}, {{location.location.longitude}})
+	  {% endif  %}
           </a>
         </li>{% endfor %}</ul>
       </div>

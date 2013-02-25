@@ -7,6 +7,7 @@ import urllib
 import hmac
 import json
 import hashlib
+import urlparse
 from base64 import urlsafe_b64decode, urlsafe_b64encode
 
 import requests
@@ -160,308 +161,56 @@ def get_token():
         return token
 
 
+def get_all(name, args):
+    total = []
+    local = fb_call(name, args)
+    count  =1 
+    while 'data' in local :
+        for d in local['data'] :
+            d['count']=count
+            total = total + [d]
+        if 'paging' not in local  :            
+            break
+        if 'next' not in local['paging']:
+            break
+        next = local['paging']['next']
+        count = count + 1
+        query = urlparse.parse_qs(urlparse.urlparse(next).query)
+        args2 = dict(args.items()+query.items() )
+        local = fb_call('search', args2)
+    return total
+
 @app.route('/local', methods=['GET', 'POST'])
+       
 def local():
     access_token = get_token()
+    local = []
+    likes = {} # hash of likes
     if access_token:
-        local = fb_call('search', args={
+        likesd= get_all('me/likes', {'access_token': access_token})
+        for l in likesd['data']:
+            likes[l.id]=1
+
+        local = get_all('search', {
                 'access_token': access_token,
                 'type'  : 'place',
                 'center' : '39.0483,-95.6778',
                 'distance': 1000
-                })
+                })                    
     else:
-        local = {
-            "data": [
-                {
-                    "location": {
-                        "street": "WAMC, Box 66600",
-                        "city": "Albany",
-                        "state": "NY",
-                        "country": "United States",
-                        "zip": "12206-6600",
-                        "latitude": 39.0483,
-                        "longitude": -95.6777
-                        },
-                    "category": "Government organization",
-                    "name": "WAMC Northeast Public Radio",
-                    "id": "57832728487"
-                    },
-                {
-                    "location": {
-                        "street": "534 S Kansas Avenue",
-                        "city": "Topeka",
-                        "state": "KS",
-                        "country": "United States",
-                        "zip": "66603",
-                        "latitude": 39.04861,
-                        "longitude": -95.67583
-                        },
-                    "category": "Local business",
-                    "name": "PC911 of Kansas",
-                    "id": "145371485522279"
-                    },
-                {
-                    "location": {
-                        "street": "900 SW Jackson St Rm 1031",
-                        "city": "Topeka",
-                        "state": "KS",
-                        "country": "United States",
-                        "zip": "66612-1220",
-                        "latitude": 39.047554008068,
-                        "longitude": -95.677819332788
-                        },
-                    "category": "Landmark",
-                    "name": "Kansas State Capitol",
-                    "id": "105509059482760"
-                    },
-                {
-                    "location": {
-                        "street": "900 SW Jackson, Suite 1051",
-                        "city": "Topeka",
-                        "state": "KS",
-                        "country": "United States",
-                        "zip": "66612",
-                        "latitude": 39.04775,
-                        "longitude": -95.6766
-                        },
-                    "category": "Government organization",
-                    "name": "Kansas State Board of Nursing",
-                    "id": "309697416292"
-                    },
-                {
-                    "location": {
-                        "street": "900 SW Jackson Suite 101",
-                        "city": "Topeka",
-                        "state": "KS",
-                        "country": "United States",
-                        "zip": "66611",
-                        "latitude": 39.04775,
-                        "longitude": -95.6766
-                        },
-                    "category": "Government organization",
-                    "name": "Kansas African American Affairs Commission",
-                    "id": "331823803043"
-                    },
-                {
-                    "location": {
-                        "street": "915 S.W. Harrison St. Topeka",
-                        "city": "Topeka",
-                        "state": "KS",
-                        "country": "United States",
-                        "zip": "66612-2021",
-                        "latitude": 39.047719997395,
-                        "longitude": -95.678902104763
-                        },
-                    "category": "Local business",
-                    "name": "Docking State Office Building",
-                    "id": "218789988188265"
-                    },
-                {
-                    "location": {
-                        "street": "P.O. Box 1794",
-                        "city": "Topeka",
-                        "state": "KS",
-                        "country": "United States",
-                        "zip": "66601-1794",
-                        "latitude": 39.048888,
-                        "longitude": -95.675946
-                        },
-                    "category": "Local business",
-                    "name": "Topeka Metro News",
-                    "id": "115730945153212"
-                    },
-                {
-                    "location": {
-                        "street": "212 SW Eighth Avenue, Suite 300",
-                        "city": "Topeka",
-                        "state": "KS",
-                        "country": "United States",
-                        "zip": "66603-3936",
-                        "latitude": 39.04938,
-                        "longitude": -95.67666
-                        },
-                    "category": "Non-profit organization",
-                    "name": "Kansas Health Institute",
-                    "id": "165670096806030"
-                    },
-                {
-                    "location": {
-                        "street": "300 SW 8th Ave, 3rd Floor",
-                        "city": "Topeka",
-                        "state": "KS",
-                        "country": "United States",
-                        "zip": "66603",
-                        "latitude": 39.049776,
-                        "longitude": -95.677514
-                        },
-                    "category": "Government organization",
-                    "name": "Kansas Association of Counties",
-                    "id": "129648640880"
-                    },
-                {
-                    "location": {
-                        "street": "300 SW 10th Room 330-E",
-                        "city": "Topeka",
-                        "state": "KS",
-                        "country": "United States",
-                        "zip": "66612",
-                        "latitude": 39.04681,
-                        "longitude": -95.678593
-                        },
-                    "category": "Government organization",
-                    "name": "Kansas Senate Republicans",
-                    "id": "298687186900841"
-                    },
-                {
-                    "location": {
-                        "street": "214 SE 8th Ave",
-                        "city": "Topeka",
-                        "state": "KS",
-                        "country": "United States",
-                        "zip": "66603",
-                        "latitude": 39.048660867505,
-                        "longitude": -95.672605940389
-                        },
-                    "category": "Concert venue",
-                    "name": "Topeka Performing Arts Center",
-                    "id": "65358010509"
-                    },
-                {
-                    "location": {
-                        "street": "1100 Kansas Ave",
-                        "city": "Topeka",
-                        "state": "KS",
-                        "country": "United States",
-                        "zip": "66612-1329",
-                        "latitude": 39.044007846224,
-                        "longitude": -95.676249928545
-                        },
-                    "category": "Local business",
-                    "name": "McDonald's at 1100 Kansas Ave",
-                    "id": "120388507976311"
-                    },
-                {
-                    "location": {
-                        "street": "817 SW Harrison St",
-                        "city": "Topeka",
-                        "state": "KS",
-                        "country": "United States",
-                        "zip": "66612-1607",
-                        "latitude": 39.049617,
-                        "longitude": -95.679106
-                        },
-                    "category": "Local business",
-                    "name": "First Presbyterian Church",
-                    "id": "120328127982465"
-                    },
-                {
-                    "location": {
-                        "street": "118 SW 8th Ave.",
-                        "city": "Topeka",
-                        "state": "KS",
-                        "country": "United States",
-                        "zip": "66603",
-                        "latitude": 39.049431,
-                        "longitude": -95.675415
-                        },
-                    "category": "Bar",
-                    "name": "The Celtic Fox Irish Pub and Restaurant",
-                    "id": "113218905478037"
-                    },
-                {
-                    "location": {
-                        "street": "",
-                        "city": "Topeka",
-                        "state": "KS",
-                        "country": "United States",
-                        "zip": "66606",
-                        "latitude": 39.04861,
-                        "longitude": -95.67583
-                        },
-                    "category": "Local business",
-                    "name": "Hummer Sports Park",
-                    "id": "103756209710081"
-                    },
-                {
-                    "location": {
-                        "street": "",
-                        "city": "Topeka",
-                        "state": "KS",
-                        "country": "United States",
-                        "zip": "",
-                        "latitude": 39.04861,
-                        "longitude": -95.67583
-                        },
-                    "category": "Local business",
-                    "name": "Shawnee County Treasurer's Office",
-                    "id": "140907545979889"
-                    },
-                {
-                    "location": {
-                        "street": "212 SW 8th Avenue, Ste 200",
-                        "city": "Topeka",
-                        "state": "KS",
-                        "country": "United States",
-                        "zip": "66612",
-                        "latitude": 39.049801,
-                        "longitude": -95.676826
-                        },
-                    "category": "Non-profit organization",
-                    "name": "Kansas Economic Progress Council",
-                    "id": "126508860738346"
-                    },
-                {
-                    "location": {
-                        "street": "1034 S. Kansas Ave",
-                        "city": "Topeka",
-                        "state": "KS",
-                        "country": "United States",
-                        "zip": "66612",
-                        "latitude": 39.044593139763,
-                        "longitude": -95.675920910135
-                        },
-                    "category": "Restaurant/cafe",
-                    "name": "Hanover Pancake House",
-                    "id": "118997484679"
-                    },
-                {
-                    "location": {
-                        "street": "109 SW 9th Street",
-                        "city": "Topeka",
-                        "state": "KS",
-                        "country": "United States",
-                        "zip": "66612-1280",
-                        "latitude": 39.04737,
-                        "longitude": -95.6753
-                        },
-                    "category": "Government organization",
-                    "name": "Kansas Department of Agriculture",
-                    "id": "168426129870845"
-                    },
-                {
-                    "location": {
-                        "street": "616 Jefferson",
-                        "city": "Topeka",
-                        "state": "KS",
-                        "country": "United States",
-                        "zip": "66607",
-                        "latitude": 39.04995,
-                        "longitude": -95.66779
-                        },
-                    "category": "Media/news/publishing",
-                    "name": "Topeka Capital-Journal",
-                    "id": "303449480540"
-                    }
-            ], 
-            "paging": {
-                "next": "https://graph.facebook.com/search?type=place&center=39.0483,-95.6778&distance=1000&limit=25&offset=25&__after_id=303449480540"
-                }
-            }
-
+        local = get_all('search', {  'type'  : 'page',   'q' : 'Topeka, Kansas' })
+        likes["105509059482760"]= 1
+        likes['5530982975']=1
+        likes['20533939143']=1
+        likes['112136275468553']=1
+    for d in local:
+        if d['id'] in likes :
+            d['liked']=1
+        else:
+            d['liked']=0
 
     return render_template(
-        'local.html', app_id=FB_APP_ID, token=access_token, local=local, name=FB_APP_NAME)
+        'local.html', app_id=FB_APP_ID, token=access_token, local=local, likes=likes, name=FB_APP_NAME)
 
 
 
