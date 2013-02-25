@@ -189,7 +189,8 @@ def local():
     if access_token:
         likesd= get_all('me/likes', {'access_token': access_token})
         for l in likesd:
-            likes[l.id]=1
+            #{u'created_time': u'2013-02-25T02:58:13+0000', u'id': u'260878560697523', u'category': u'Education', u'name': u'Manchester School for Young Children', 'count': 1}
+            likes[l['id']]=l['name']
 
         local = get_all('search', {
                 'access_token': access_token,

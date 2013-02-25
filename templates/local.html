@@ -146,10 +146,11 @@
       <h1>Like Lookup</h1>
       <div class="list">
         <h3>your likes</h3>
-        <ul class="likes">{% for id in likes.keys() %}
+        <ul class="likes">{% for id,name in likes.items() %}
         <li>
           <a href="http://www.facebook.com/{{id}}">
             <img src="https://graph.facebook.com/{{id}}/picture">
+            {{name}} 
           </a>
         </li>{% endfor %}</ul>
       </div>
