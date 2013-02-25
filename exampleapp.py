@@ -188,7 +188,7 @@ def local():
     likes = {} # hash of likes
     if access_token:
         likesd= get_all('me/likes', {'access_token': access_token})
-        for l in likesd['data']:
+        for l in likesd:
             likes[l.id]=1
 
         local = get_all('search', {
