@@ -201,7 +201,7 @@ def local():
                 'access_token': access_token,
                 'type'  : 'place',
                 'center' : '39.0483,-95.6778',
-                'distance': 1000
+                'distance': 3000
                 })                    
         for d in local:
             d['online']=1
