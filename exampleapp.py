@@ -183,10 +183,15 @@ def get_all(name, args):
 @app.route('/local', methods=['GET', 'POST'])
        
 def local():
+
     access_token = get_token()
+    channel_url = url_for('get_channel', _external=True)
+    channel_url = channel_url.replace('http:', '').replace('https:', '')
+
     local = []
     likes = {} # hash of likes
     if access_token:
+        me = fb_call('me', args={'access_token': access_token})
         likesd= get_all('me/likes', {'access_token': access_token})
         for l in likesd:
             #{u'created_time': u'2013-02-25T02:58:13+0000', u'id': u'260878560697523', u'category': u'Education', u'name': u'Manchester School for Young Children', 'count': 1}
@@ -202,11 +207,12 @@ def local():
             d['online']=1
 
     else:
-        local = get_all('search', {  'type'  : 'page',   'q' : 'Topeka, Kansas' })
-        likes["105509059482760"]= 1
-        likes['5530982975']=1
-        likes['20533939143']=1
-        likes['112136275468553']=1
+        return render_template('login.html', app_id=FB_APP_ID, token=access_token, url=request.url, channel_url=channel_url, name=FB_APP_NAME)
+        # local = get_all('search', {  'type'  : 'page',   'q' : 'Topeka, Kansas' })
+        # likes["105509059482760"]= 1
+        # likes['5530982975']=1
+        # likes['20533939143']=1
+        # likes['112136275468553']=1
 
     for d in local:
         if d['id'] in likes :
@@ -214,8 +220,9 @@ def local():
         else:
             d['liked']=0
 
-    return render_template(
-        'local.html', app_id=FB_APP_ID, token=access_token, local=local, likes=likes, name=FB_APP_NAME)
+    return render_template('local.html', app_id=FB_APP_ID, token=access_token, local=local, likes=likes, me=me, name=FB_APP_NAME)
+    
+
 
 
 
