@@ -123,6 +123,7 @@
           <a href="#" onclick="window.open('http://www.facebook.com/{{location.id}}')">
             <img src="https://graph.facebook.com/{{location.id}}/picture" alt="{{location.name}}">
             {{location.name}}
+            {{location.location.street}}( {{location.location.latitude}}, {{location.location.longitude}})
           </a>
         </li>{% endfor %}</ul>
       </div>
