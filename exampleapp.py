@@ -254,11 +254,22 @@ def local2():
     fb_app = fb_call(FB_APP_ID, args={'access_token': access_token})
 
     return render_template('local.html', app=fb_app, app_id=FB_APP_ID, token=access_token, local=local, likes=likes, me=me, name=FB_APP_NAME)
+
+
+@app.route('/likes', methods=['GET', 'POST'])
+def likes():
+    access_token = get_token()
+    channel_url = url_for('get_channel', _external=True)
+    channel_url = channel_url.replace('http:', '').replace('https:', '')
+
+    local = []
+    likes = {} # hash of likes
+    if access_token:
+        me = fb_call('me', args={'access_token': access_token})
+        likes= get_all('me/likes', {'access_token': access_token})
+        fb_app = fb_call(FB_APP_ID, args={'access_token': access_token})
+        return render_template('likes.html', app=fb_app, app_id=FB_APP_ID, token=access_token, likes=likes, me=me, name=FB_APP_NAME)
     
-
-
-
-
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
