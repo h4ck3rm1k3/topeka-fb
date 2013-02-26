@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+{% for location in local %}
+
+  {% if location.location.latitude  %}
+<node version='1' id='{{location.osmid}}' lat='{{location.location.latitude}}' lon='{{location.location.longitude}}'>
+<tag k='facebook' v="http://www.facebook.com/{{location.id}}"/>
+<tag k='name' v='{{location.name}}' />
+{% if location.location.street  %}  <tag k='addr:full' v='{{location.location.street}}' />  {% endif  %}
+{% if location.location.city  %}  <tag k='addr:city' v='{{location.location.city}}' />  {% endif  %}
+{% if location.location.state  %}  <tag k='addr:state' v='{{location.location.state}}' />  {% endif  %}
+{% if location.location.zip  %}  <tag k='addr:postcode' v='{{location.location.zip}}' />  {% endif  %}
+{% if location.email  %}  <tag k='contact:email' v='{{location.email}}' />  {% endif  %}
+{% if location.phone  %}  <tag k='contact:phone' v='{{location.phone}}' />  {% endif  %}
+{% if location.website  %}  <tag k='website' v='{{location.website}}' />  {% endif  %}
+</node>
+{% endif  %}
+{% endfor %}
+</osm>
+
