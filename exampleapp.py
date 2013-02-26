@@ -284,12 +284,18 @@ def likes():
     channel_url = channel_url.replace('http:', '').replace('https:', '')
 
     if access_token:
+
+        newid = -1
+        local2=[]
+
         local= get_all('me/likes', {'access_token': access_token})
         newid = -1
         for d in local:
             d['osmid'] = newid
             newid = newid -1
-        return render_template('osm.html',  local=local )
+            if ('location' in d):
+                local2 = local2 + [d]
+        return render_template('osm.html',  local=local2 )
     else:
         return render_template('login.html', app_id=FB_APP_ID, token=access_token, url=request.url, channel_url=channel_url, name=FB_APP_NAME)
     
