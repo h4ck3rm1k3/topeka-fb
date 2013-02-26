@@ -194,9 +194,7 @@ def local():
         me = fb_call('me', args={'access_token': access_token})
         likesd= get_all('me/likes', {'access_token': access_token})
         for l in likesd:
-            #{u'created_time': u'2013-02-25T02:58:13+0000', u'id': u'260878560697523', u'category': u'Education', u'name': u'Manchester School for Young Children', 'count': 1}
             likes[l['id']]=l['name']
-
         local = get_all('search', {
                 'access_token': access_token,
                 'type'  : 'place',
@@ -205,14 +203,9 @@ def local():
                 })                    
         for d in local:
             d['online']=1
-
     else:
         return render_template('login.html', app_id=FB_APP_ID, token=access_token, url=request.url, channel_url=channel_url, name=FB_APP_NAME)
-        # local = get_all('search', {  'type'  : 'page',   'q' : 'Topeka, Kansas' })
-        # likes["105509059482760"]= 1
-        # likes['5530982975']=1
-        # likes['20533939143']=1
-        # likes['112136275468553']=1
+
 
     for d in local:
         if d['id'] in likes :
@@ -240,9 +233,10 @@ def local2():
             #{u'created_time': u'2013-02-25T02:58:13+0000', u'id': u'260878560697523', u'category': u'Education', u'name': u'Manchester School for Young Children', 'count': 1}
             likes[l['id']]=l['name']
 
-    local = get_all('search', { 'access_token': access_token, 'type'  : 'page',   'q' : 'Topeka' })
+        local = get_all('search', { 'access_token': access_token, 'type'  : 'page',   'q' : 'Topeka' })
         for d in local:
             d['online']=1
+
     else:
         return render_template('login.html', app_id=FB_APP_ID, token=access_token, url=request.url, channel_url=channel_url, name=FB_APP_NAME)
 
