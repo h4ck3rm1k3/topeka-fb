@@ -288,9 +288,7 @@ def likes():
         newid = -1
         local2=[]
 
-        local= get_all('me/likes', {'access_token': access_token
-                                    'fields' :  'id,name,location,website'
-                                    })
+        local= get_all('me/likes', {'access_token': access_token,                                  'fields' :  'id,name,location,website'                                    })
         newid = -1
         for d in local:
             d['osmid'] = newid
