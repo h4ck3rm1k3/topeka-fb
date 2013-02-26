@@ -269,6 +269,8 @@ def likes():
         likes= get_all('me/likes', {'access_token': access_token})
         fb_app = fb_call(FB_APP_ID, args={'access_token': access_token})
         return render_template('likes.html', app=fb_app, app_id=FB_APP_ID, token=access_token, likes=likes, me=me, name=FB_APP_NAME)
+    else:
+        return render_template('login.html', app_id=FB_APP_ID, token=access_token, url=request.url, channel_url=channel_url, name=FB_APP_NAME)
     
 
 @app.route('/', methods=['GET', 'POST'])
