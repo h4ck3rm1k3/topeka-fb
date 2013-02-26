@@ -256,19 +256,40 @@ def local2():
     return render_template('local.html', app=fb_app, app_id=FB_APP_ID, token=access_token, local=local, likes=likes, me=me, name=FB_APP_NAME)
 
 
+
+
+@app.route('/local3', methods=['GET', 'POST'])
+def local3():
+    local = get_all('search', { 
+                                'type'  : 'page',   
+                                'q' : 'Topeka' ,
+                                'fields' :  'id,name,location,website,phone'
+                                })
+#,email,website
+    newid = -1
+    local2=[]
+    for d in local:
+        d['osmid'] = newid
+        newid = newid -1
+        if ('location' in d):
+            local2 = local2 + [d]
+
+    return render_template('osm.html', local=local2)
+
+
 @app.route('/likes', methods=['GET', 'POST'])
 def likes():
     access_token = get_token()
     channel_url = url_for('get_channel', _external=True)
     channel_url = channel_url.replace('http:', '').replace('https:', '')
 
-    local = []
-    likes = {} # hash of likes
     if access_token:
-        me = fb_call('me', args={'access_token': access_token})
-        likes= get_all('me/likes', {'access_token': access_token})
-        fb_app = fb_call(FB_APP_ID, args={'access_token': access_token})
-        return render_template('likes.html', app=fb_app, app_id=FB_APP_ID, token=access_token, likes=likes, me=me, name=FB_APP_NAME)
+        local= get_all('me/likes', {'access_token': access_token})
+        newid = -1
+        for d in local:
+            d['osmid'] = newid
+            newid = newid -1
+        return render_template('osm.html',  local=local )
     else:
         return render_template('login.html', app_id=FB_APP_ID, token=access_token, url=request.url, channel_url=channel_url, name=FB_APP_NAME)
     
@@ -276,14 +297,10 @@ def likes():
 @app.route('/', methods=['GET', 'POST'])
 def index():
     # print get_home()
-
-
     access_token = get_token()
     channel_url = url_for('get_channel', _external=True)
     channel_url = channel_url.replace('http:', '').replace('https:', '')
-
     if access_token:
-
         me = fb_call('me', args={'access_token': access_token})
         fb_app = fb_call(FB_APP_ID, args={'access_token': access_token})
         likes = fb_call('me/likes',
