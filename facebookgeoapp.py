@@ -17,8 +17,13 @@ on_heroku = True
 
 if 'RUN_LOCALLY_OUTSIDE_HEROKU' in os.environ:
     import MyRequests as facebook_request
+    graph_server= facebook_request.graph_server() 
+    facebook_server= facebook_request.facebook_server() 
+
 else:
     import requests as facebook_request
+    graph_server= "https://graph.facebook.com"
+    facebook_server= "https://www.facebook.com"
     on_heroku = False
 
 
@@ -29,8 +34,6 @@ FB_APP_ID = os.environ.get('FACEBOOK_APP_ID')
 requests = facebook_request.session()
 
 #graph_server= 'https://graph.facebook.com'
-graph_server= facebook_request.graph_server() 
-facebook_server= facebook_request.facebook_server() 
 
 app_url = graph_server + '/{0}'.format(FB_APP_ID)
 FB_APP_NAME = json.loads(facebook_request.get(app_url).content).get('name')
