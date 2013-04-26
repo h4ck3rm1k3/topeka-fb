@@ -1,9 +1,36 @@
-Facebook/Heroku sample app -- Python
+Facebook/Heroku Lawrence App -- Python
 ====================================
 
-This is a sample app showing use of the Facebook Graph API, written in
-Python, designed for deployment to Heroku_.
+Lawrence Kansas app for all things Lawrence. 
 
+Ideas for the app :
+
+Openstreetmap map of the city
+
+Integration with facebook pages, show pages in the area that you have not discovered yet.
+Show upcoming events in the area on the map
+
+Integration with foursquare : show people and places in the area.
+
+Google plus :google places integration.
+
+Twitter :twitter integration.
+
+Website scraping :
+
+   updating osm with links found 
+   extracting addresses from websites
+
+Wikipedia :
+   show wikipedia articles
+
+Phototagging :
+   show commons photos
+   allow hosting of photos on archive.com
+   allow hosting of photos on commons.com
+   allow transfer of FB photos to commons.com
+   allow geotagging of photos
+   
 .. _Heroku: http://www.heroku.com/
 
 Run locally

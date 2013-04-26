@@ -1,1 +1,1 @@
-web: python exampleapp.py
+web: python facebookgeoapp.py

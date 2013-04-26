@@ -10,14 +10,14 @@ import hashlib
 import urlparse
 from base64 import urlsafe_b64decode, urlsafe_b64encode
 
-import requests
+import MyRequests
 from flask import Flask, request, redirect, render_template, url_for
 
 FB_APP_ID = os.environ.get('FACEBOOK_APP_ID')
-requests = requests.session()
+requests = MyRequests.session()
 
 app_url = 'https://graph.facebook.com/{0}'.format(FB_APP_ID)
-FB_APP_NAME = json.loads(requests.get(app_url).content).get('name')
+FB_APP_NAME = json.loads(MyRequests.get(app_url).content).get('name')
 FB_APP_SECRET = os.environ.get('FACEBOOK_SECRET')
 
 
@@ -57,7 +57,7 @@ def fbapi_get_string(path,
     url = u'https://' + domain + u'.facebook.com' + path
     params_encoded = encode_func(params)
     url = url + params_encoded
-    result = requests.get(url).content
+    result = MyRequests.get(url).content
 
     return result
 
@@ -99,13 +99,13 @@ def fql(fql, token, args=None):
 
     url = "https://api.facebook.com/method/fql.query"
 
-    r = requests.get(url, params=args)
+    r = MyRequests.get(url, params=args)
     return json.loads(r.content)
 
 
 def fb_call(call, args=None):
     url = "https://graph.facebook.com/{0}".format(call)
-    r = requests.get(url, params=args)
+    r = MyRequests.get(url, params=args)
     return json.loads(r.content)
 
 
@@ -116,51 +116,9 @@ app.config.from_object('conf.Config')
 
 
 def get_home():
-    return 'https://' + request.host + '/'
+    return 'https://' + MyRequests.host + '/'
 
-
-def get_token():
-
-    if request.args.get('code', None):
-        return fbapi_auth(request.args.get('code'))[0]
-
-    cookie_key = 'fbsr_{0}'.format(FB_APP_ID)
-
-    if cookie_key in request.cookies:
-
-        c = request.cookies.get(cookie_key)
-        encoded_data = c.split('.', 2)
-
-        sig = encoded_data[0]
-        data = json.loads(urlsafe_b64decode(str(encoded_data[1]) +
-            (64-len(encoded_data[1])%64)*"="))
-
-        if not data['algorithm'].upper() == 'HMAC-SHA256':
-            raise ValueError('unknown algorithm {0}'.format(data['algorithm']))
-
-        h = hmac.new(FB_APP_SECRET, digestmod=hashlib.sha256)
-        h.update(encoded_data[1])
-        expected_sig = urlsafe_b64encode(h.digest()).replace('=', '')
-
-        if sig != expected_sig:
-            raise ValueError('bad signature')
-
-        code =  data['code']
-
-        params = {
-            'client_id': FB_APP_ID,
-            'client_secret': FB_APP_SECRET,
-            'redirect_uri': '',
-            'code': data['code']
-        }
-
-        from urlparse import parse_qs
-        r = requests.get('https://graph.facebook.com/oauth/access_token', params=params)
-        token = parse_qs(r.content).get('access_token')
-
-        return token
-
-
+# collect all pages via json
 def get_all(name, args):
     total = []
     local = fb_call(name, args)
@@ -180,14 +138,41 @@ def get_all(name, args):
         local = fb_call('search', args2)
     return total
 
-@app.route('/local', methods=['GET', 'POST'])
-       
-def local():
+def get_token():
+    if MyRequests.args.get('code', None):
+        return fbapi_auth(MyRequests.args.get('code'))[0]
+    cookie_key = 'fbsr_{0}'.format(FB_APP_ID)
+    if cookie_key in request.cookies:
+        c = request.cookies.get(cookie_key)
+        encoded_data = c.split('.', 2)
+        sig = encoded_data[0]
+        data = json.loads(urlsafe_b64decode(str(encoded_data[1]) +
+            (64-len(encoded_data[1])%64)*"="))
+        if not data['algorithm'].upper() == 'HMAC-SHA256':
+            raise ValueError('unknown algorithm {0}'.format(data['algorithm']))
+        h = hmac.new(FB_APP_SECRET, digestmod=hashlib.sha256)
+        h.update(encoded_data[1])
+        expected_sig = urlsafe_b64encode(h.digest()).replace('=', '')
+        if sig != expected_sig:
+            raise ValueError('bad signature')
+        code =  data['code']
+        params = {
+            'client_id': FB_APP_ID,
+            'client_secret': FB_APP_SECRET,
+            'redirect_uri': '',
+            'code': data['code']
+        }
+        from urlparse import parse_qs
+        r = MyRequests.get('https://graph.facebook.com/oauth/access_token', params=params)
+        token = parse_qs(r.content).get('access_token')
+        return token
 
+# find by lat lon
+@app.route('/discover/ll/<lat>/<lon>/<range>', methods=['GET', 'POST'])      
+def discover_lat_lon(paramLat,paramLon,paramRange):
     access_token = get_token()
     channel_url = url_for('get_channel', _external=True)
     channel_url = channel_url.replace('http:', '').replace('https:', '')
-
     local = []
     likes = {} # hash of likes
     if access_token:
@@ -198,74 +183,55 @@ def local():
         local = get_all('search', {
                 'access_token': access_token,
                 'type'  : 'place',
-                'center' : '39.0483,-95.6778',
-                'distance': 10000
+                'center' : paramLat + ',' + paramLon ,
+                'distance': paramRange
                 })                    
         for d in local:
             d['online']=1
     else:
         return render_template('login.html', app_id=FB_APP_ID, token=access_token, url=request.url, channel_url=channel_url, name=FB_APP_NAME)
-
-
     for d in local:
         if d['id'] in likes :
             d['liked']=1
         else:
             d['liked']=0
-
     fb_app = fb_call(FB_APP_ID, args={'access_token': access_token})
-
     return render_template('local.html', app=fb_app, app_id=FB_APP_ID, token=access_token, local=local, likes=likes, me=me, name=FB_APP_NAME)
-    
 
-@app.route('/local2', methods=['GET', 'POST'])
-def local2():
+# find new pages not yet liked
+@app.route('/discover/name/<locationname>', methods=['GET', 'POST'])
+def discover_name(paramLocationName):
     access_token = get_token()
     channel_url = url_for('get_channel', _external=True)
     channel_url = channel_url.replace('http:', '').replace('https:', '')
-
     local = []
     likes = {} # hash of likes
     if access_token:
         me = fb_call('me', args={'access_token': access_token})
         likesd= get_all('me/likes', {'access_token': access_token})
         for l in likesd:
-            #{u'created_time': u'2013-02-25T02:58:13+0000', u'id': u'260878560697523', u'category': u'Education', u'name': u'Manchester School for Young Children', 'count': 1}
             likes[l['id']]=l['name']
-
-        local = get_all('search', { 'access_token': access_token, 'type'  : 'page',   'q' : 'Topeka' })
+        local = get_all('search', { 'access_token': access_token, 'type'  : 'page',   'q' : paramLocationName })
         for d in local:
             d['online']=1
-
     else:
         return render_template('login.html', app_id=FB_APP_ID, token=access_token, url=request.url, channel_url=channel_url, name=FB_APP_NAME)
-
-        # likes["105509059482760"]= 1
-        # likes['5530982975']=1
-        # likes['20533939143']=1
-        # likes['112136275468553']=1
-
     for d in local:
         if d['id'] in likes :
             d['liked']=1
         else:
             d['liked']=0
-
     fb_app = fb_call(FB_APP_ID, args={'access_token': access_token})
-
     return render_template('local.html', app=fb_app, app_id=FB_APP_ID, token=access_token, local=local, likes=likes, me=me, name=FB_APP_NAME)
 
-
-
-
-@app.route('/local3', methods=['GET', 'POST'])
-def local3():
+# export locals to osm
+@app.route('/local/export/osm/<name>', methods=['GET', 'POST'])
+def osm_export(paramName):
     local = get_all('search', { 
                                 'type'  : 'page',   
-                                'q' : 'Topeka' ,
+                                'q' : paramName ,
                                 'fields' :  'id,name,location,website,phone'
                                 })
-#,email,website
     newid = -1
     local2=[]
     for d in local:
@@ -273,22 +239,19 @@ def local3():
         newid = newid -1
         if ('location' in d):
             local2 = local2 + [d]
-
     return render_template('osm.html', local=local2)
 
-
-@app.route('/likes', methods=['GET', 'POST'])
+# export likes to an osm file
+@app.route('/likes/export/osm', methods=['GET', 'POST'])
 def likes():
     access_token = get_token()
     channel_url = url_for('get_channel', _external=True)
     channel_url = channel_url.replace('http:', '').replace('https:', '')
-
     if access_token:
-
         newid = -1
         local2=[]
-
-        local= get_all('me/likes', {'access_token': access_token,                                  'fields' :  'id,name,location,website'                                    })
+        # find all the liked pages
+        local= get_all('me/likes', {'access_token': access_token,  'fields' :  'id,name,location,website' })
         newid = -1
         for d in local:
             d['osmid'] = newid
@@ -298,7 +261,6 @@ def likes():
         return render_template('osm.html',  local=local2 )
     else:
         return render_template('login.html', app_id=FB_APP_ID, token=access_token, url=request.url, channel_url=channel_url, name=FB_APP_NAME)
-    
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -315,23 +277,18 @@ def index():
                           args={'access_token': access_token, 'limit': 4})
         photos = fb_call('me/photos',
                          args={'access_token': access_token, 'limit': 16})
-
         redir = get_home() + 'close/'
         POST_TO_WALL = ("https://www.facebook.com/dialog/feed?redirect_uri=%s&"
                         "display=popup&app_id=%s" % (redir, FB_APP_ID))
-
         app_friends = fql(
             "SELECT uid, name, is_app_user, pic_square "
             "FROM user "
             "WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = me()) AND "
             "  is_app_user = 1", access_token)
-
         SEND_TO = ('https://www.facebook.com/dialog/send?'
                    'redirect_uri=%s&display=popup&app_id=%s&link=%s'
                    % (redir, FB_APP_ID, get_home()))
-
         url = request.url
-
         return render_template(
             'index.html', app_id=FB_APP_ID, token=access_token, likes=likes,
             friends=friends, photos=photos, app_friends=app_friends, app=fb_app,
@@ -343,7 +300,6 @@ def index():
 @app.route('/channel.html', methods=['GET', 'POST'])
 def get_channel():
     return render_template('channel.html')
-
 
 @app.route('/close/', methods=['GET', 'POST'])
 def close():
