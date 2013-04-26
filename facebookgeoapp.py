@@ -19,12 +19,14 @@ if 'RUN_LOCALLY_OUTSIDE_HEROKU' in os.environ:
     import MyRequests as facebook_request
     graph_server= facebook_request.graph_server() 
     facebook_server= facebook_request.facebook_server() 
+    api_facebook_server = facebook_request.facebook_api_server() 
 
 else:
     import requests
     import requests as facebook_request
     graph_server= "https://graph.facebook.com"
     facebook_server= "https://www.facebook.com"
+    api_facebook_server = "https://api.facebook.com"
     on_heroku = False
 
 
@@ -118,7 +120,7 @@ def fql(fql, token, args=None):
 
     args["query"], args["format"], args["access_token"] = fql, "json", token
 
-    url = facebook_server + "/method/fql.query"
+    url = api_facebook_server + "/method/fql.query"
 
     r = facebook_request.get(url, params=args)
     return json.loads(r.content)
