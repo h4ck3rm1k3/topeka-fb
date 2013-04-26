@@ -189,7 +189,7 @@ def get_token():
             'code': data['code']
         }
         from urlparse import parse_qs
-        r = facebook_request.get( facebook_graph + '/oauth/access_token', params=params)
+        r = facebook_request.get( graph_server + '/oauth/access_token', params=params)
         token = parse_qs(r.content).get('access_token')
         return token
 
