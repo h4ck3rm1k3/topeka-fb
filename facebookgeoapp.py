@@ -21,6 +21,7 @@ if 'RUN_LOCALLY_OUTSIDE_HEROKU' in os.environ:
     facebook_server= facebook_request.facebook_server() 
 
 else:
+    import requests
     import requests as facebook_request
     graph_server= "https://graph.facebook.com"
     facebook_server= "https://www.facebook.com"
@@ -164,7 +165,7 @@ def get_all(name, args):
     return total
 
 def get_token():
-    if facebook_request.args.get('code', None):
+    if request.args.get('code', None):
         return fbapi_auth(facebook_request.args.get('code'))[0]
     cookie_key = 'fbsr_{0}'.format(FB_APP_ID)
     if cookie_key in request.cookies:
