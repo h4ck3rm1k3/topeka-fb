@@ -142,7 +142,7 @@ app.config.from_object('conf.Config')
 
 
 def get_home():
-    return 'https://' + facebook_request.host + '/'
+    return 'https://' + request.host + '/'
 
 # collect all pages via json
 def get_all(name, args):
