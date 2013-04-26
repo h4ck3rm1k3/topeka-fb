@@ -22,6 +22,7 @@ if 'RUN_LOCALLY_OUTSIDE_HEROKU' in os.environ:
     api_facebook_server = facebook_request.facebook_api_server() 
 
 else:
+    print "running on facebook"
     import requests
     import requests as facebook_request
     graph_server= "https://graph.facebook.com"
@@ -35,36 +36,34 @@ from flask import Flask, request, redirect, render_template, url_for
 
 FB_APP_ID = os.environ.get('FACEBOOK_APP_ID')
 requests = facebook_request.session()
-
-#graph_server= 'https://graph.facebook.com'
-
 app_url = graph_server + '/{0}'.format(FB_APP_ID)
 FB_APP_NAME = json.loads(facebook_request.get(app_url).content).get('name')
 FB_APP_SECRET = os.environ.get('FACEBOOK_SECRET')
 
+print "creating app from %s \n" % __name__
+app = Flask(__name__)
+app.config.from_object(__name__)
+app.config.from_object('conf.Config')
 
 def oauth_login_url(preserve_path=True, next_url=None):
     fb_login_uri = ( facebook_server + "/dialog/oauth"
                     "?client_id=%s&redirect_uri=%s" %
                     (app.config['FB_APP_ID'], get_home()))
-
     if app.config['FBAPI_SCOPE']:
         fb_login_uri += "&scope=%s" % ",".join(app.config['FBAPI_SCOPE'])
     return fb_login_uri
 
-
 def simple_dict_serialisation(params):
     return "&".join(map(lambda k: "%s=%s" % (k, params[k]), params.keys()))
 
-
 def base64_url_encode(data):
     return base64.urlsafe_b64encode(data).rstrip('=')
-
 
 def fbapi_get_string(path,
                      params=None, 
                      access_token=None,
                      encode_func=urllib.urlencode):
+    print "fbapi_get_string: %s\n" % path
     """Make an API call"""
     if not params:
         params = {}
@@ -78,55 +77,49 @@ def fbapi_get_string(path,
     params_encoded = encode_func(params)
     url = url + params_encoded
     result = facebook_request.get(url).content
-
     return result
 
 
 def fbapi_auth(code):
+    print "fbapi_auth: %s\n" % code
     params = {'client_id': app.config['FB_APP_ID'],
               'redirect_uri': get_home(),
               'client_secret': app.config['FB_APP_SECRET'],
               'code': code}
-
     result = fbapi_get_string(path=u"/oauth/access_token?", params=params,
                               encode_func=simple_dict_serialisation)
     pairs = result.split("&")
 #    print "Pairs : " 
 #    print pairs
-
     result_dict = {}
     for pair in pairs:
         (key, value) = pair.split("=")
         result_dict[key] = value
     return (result_dict["access_token"], result_dict["expires"])
 
-
 def fbapi_get_application_access_token(id):
+    print "fbapi_get_application_access_token: %s\n" % id
     token = fbapi_get_string(
         path=u"/oauth/access_token",
         params=dict(grant_type=u'client_credentials', client_id=id,
                     client_secret=app.config['FB_APP_SECRET']),
         )
-
     token = token.split('=')[-1]
     if not str(id) in token:
         print 'Token mismatch: %s not in %s' % (id, token)
     return token
 
-
 def fql(fql, token, args=None):
+    print "fql: %s\n" % fql
     if not args:
         args = {}
-
     args["query"], args["format"], args["access_token"] = fql, "json", token
-
     url = api_facebook_server + "/method/fql.query"
-
     r = facebook_request.get(url, params=args)
     return json.loads(r.content)
 
-
 def fb_call(call, args=None):
+    print "fb_call: %s\n" % call
     url = graph_server + "/{0}".format(call)
 #    if (args is not None ) :
 #        print "args:" 
@@ -136,11 +129,6 @@ def fb_call(call, args=None):
     print "got content  :" + content
     return json.loads(content)
 
-
-print "creating app from %s \n" % __name__
-app = Flask(__name__)
-app.config.from_object(__name__)
-app.config.from_object('conf.Config')
 
 
 def get_home():
@@ -167,8 +155,15 @@ def get_all(name, args):
     return total
 
 def get_token():
+    print "get_token\n"
+    print "Args:" , request.args
+    
+    if 'RUN_LOCALLY_OUTSIDE_HEROKU' in os.environ:
+        return fbapi_auth("1234")[0]
+    
     if request.args.get('code', None):
         return fbapi_auth(facebook_request.args.get('code'))[0]
+
     cookie_key = 'fbsr_{0}'.format(FB_APP_ID)
     if cookie_key in request.cookies:
         c = request.cookies.get(cookie_key)
@@ -196,7 +191,7 @@ def get_token():
         return token
 
 # find by lat lon
-@app.route('/discover/ll/<lat>/<lon>/<range>', methods=['GET', 'POST'])      
+@app.route('/discover/ll/<paramLat>/<paramLon>/<paramRange>', methods=['GET', 'POST'])      
 def discover_lat_lon(paramLat,paramLon,paramRange):
     access_token = get_token()
     channel_url = url_for('get_channel', _external=True)
@@ -229,11 +224,16 @@ def discover_lat_lon(paramLat,paramLon,paramRange):
 # find new pages not yet liked
 @app.route('/discover/name/<paramLocationName>', methods=['GET', 'POST'])
 def discover_name(paramLocationName):
+    print "discover_name:%s\n" % paramLocationName
     access_token = get_token()
+
     channel_url = url_for('get_channel', _external=True)
     channel_url = channel_url.replace('http:', '').replace('https:', '')
     local = []
     likes = {} # hash of likes
+
+    print "access token: %s " % access_token
+
     if access_token:
         me = fb_call('me', args={'access_token': access_token})
         likesd= get_all('me/likes', {'access_token': access_token})
@@ -244,6 +244,7 @@ def discover_name(paramLocationName):
             d['online']=1
     else:
         return render_template('login.html', app_id=FB_APP_ID, token=access_token, url=request.url, channel_url=channel_url, name=FB_APP_NAME)
+
     for d in local:
         if d['id'] in likes :
             d['liked']=1
@@ -253,7 +254,7 @@ def discover_name(paramLocationName):
     return render_template('local.html', app=fb_app, app_id=FB_APP_ID, token=access_token, local=local, likes=likes, me=me, name=FB_APP_NAME)
 
 # export locals to osm
-@app.route('/local/export/osm/<name>', methods=['GET', 'POST'])
+@app.route('/local/export/osm/<paramName>', methods=['GET', 'POST'])
 def osm_export(paramName):
     local = get_all('search', { 
                                 'type'  : 'page',   
@@ -293,7 +294,7 @@ def likes():
 @app.route('/', methods=['GET', 'POST'])
 def index():
     print "Main\n"
-    # print get_home()
+    print "Home:" + get_home()
     access_token = get_token()
     channel_url = url_for('get_channel', _external=True)
     channel_url = channel_url.replace('http:', '').replace('https:', '')
@@ -333,6 +334,7 @@ def get_channel():
 @app.route('/close/', methods=['GET', 'POST'])
 def close():
     return render_template('close.html')
+
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))

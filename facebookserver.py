@@ -52,7 +52,7 @@ def graph_me_photos():
     f = open('cache/myphotos.json', 'r')
     return f.read()
 
-@app.route("/facebook/method/fql.query")
+@app.route("/api/method/fql.query")
 def fb_method_fql_query():
     print "fql query Request Data:"
     print request.args
@@ -60,5 +60,5 @@ def fb_method_fql_query():
 
 if __name__ == "__main__":
     app.debug = True
-    app.run(host='127.0.0.1', port=5002)
+    app.run(host='0.0.0.0', port=5002)
 

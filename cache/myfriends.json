@@ -3,7 +3,8 @@
     {
       "name": "YouGottaBeKidding",
       "id": "1234567"
-    }
+    } 
+    ],
   "paging": {
     "next": "https://graph.facebook.com/1238435533/friends?limit=5000&offset=5000&__after_id=23242323423"
   }
