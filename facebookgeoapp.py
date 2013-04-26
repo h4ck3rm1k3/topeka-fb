@@ -332,9 +332,8 @@ def close():
     return render_template('close.html')
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5001))
+    port = int(os.environ.get("PORT", 5000))
     if app.config.get('FB_APP_ID') and app.config.get('FB_APP_SECRET'):
-        app.debug = True
-        app.run(host='127.0.0.1', port=port)
+        app.run(host='0.0.0.0', port=port)
     else:
         print 'Cannot start application without Facebook App Id and Secret set'
