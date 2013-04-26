@@ -3,7 +3,8 @@ import os
 class Config(object):
     DEBUG = True
     TESTING = False
-
+    BIND = '127.0.0.1:8002'
+    LOGFILE = 'debug.log'
     LOG_LEVEL = os.environ.get('LOG_LEVEL', 'DEBUG')
     FBAPI_APP_ID = os.environ.get('FACEBOOK_APP_ID')
     FBAPI_APP_SECRET = os.environ.get('FACEBOOK_SECRET')

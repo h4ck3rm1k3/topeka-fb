@@ -9,6 +9,7 @@ Openstreetmap map of the city
 
 Integration with facebook pages, show pages in the area that you have not discovered yet.
 Show upcoming events in the area on the map
+   Take the address/location from fb and check if it is in a radius from the osm location
 
 Integration with foursquare : show people and places in the area.
 
@@ -31,7 +32,14 @@ Phototagging :
    allow transfer of FB photos to commons.com
    allow geotagging of photos
    
-.. _Heroku: http://www.heroku.com/
+Modules :
+   Leaflet : be able to pull a list of locations via api and display on the leaflet, open layers as well
+   Cache : be able to cache all the data so that you can test offline.
+   Local : be able to run the thing without facebook at all. What about diaspora or any other thing like wordpress/drupal?
+
+OSM : 
+   Be able to use the OSM api directly from facebook, be able to register on OSM using oauth and then share the data you own on osm.   
+
 
 Run locally
 -----------

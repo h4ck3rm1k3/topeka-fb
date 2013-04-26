@@ -10,19 +10,35 @@ import hashlib
 import urlparse
 from base64 import urlsafe_b64decode, urlsafe_b64encode
 
-import MyRequests
+
+on_heroku = True
+
+#if you want to run locally export RUN_LOCALLY_OUTSIDE_HEROKU=1
+
+if 'RUN_LOCALLY_OUTSIDE_HEROKU' in os.environ:
+    import MyRequests as facebook_request
+else:
+    import requests as facebook_request
+    on_heroku = False
+
+
+
 from flask import Flask, request, redirect, render_template, url_for
 
 FB_APP_ID = os.environ.get('FACEBOOK_APP_ID')
-requests = MyRequests.session()
+requests = facebook_request.session()
 
-app_url = 'https://graph.facebook.com/{0}'.format(FB_APP_ID)
-FB_APP_NAME = json.loads(MyRequests.get(app_url).content).get('name')
+#graph_server= 'https://graph.facebook.com'
+graph_server= facebook_request.graph_server() 
+facebook_server= facebook_request.facebook_server() 
+
+app_url = graph_server + '/{0}'.format(FB_APP_ID)
+FB_APP_NAME = json.loads(facebook_request.get(app_url).content).get('name')
 FB_APP_SECRET = os.environ.get('FACEBOOK_SECRET')
 
 
 def oauth_login_url(preserve_path=True, next_url=None):
-    fb_login_uri = ("https://www.facebook.com/dialog/oauth"
+    fb_login_uri = ( facebook_server + "/dialog/oauth"
                     "?client_id=%s&redirect_uri=%s" %
                     (app.config['FB_APP_ID'], get_home()))
 
@@ -40,24 +56,22 @@ def base64_url_encode(data):
 
 
 def fbapi_get_string(path,
-    domain=u'graph', params=None, access_token=None,
-    encode_func=urllib.urlencode):
+                     params=None, 
+                     access_token=None,
+                     encode_func=urllib.urlencode):
     """Make an API call"""
-
     if not params:
         params = {}
     params[u'method'] = u'GET'
     if access_token:
         params[u'access_token'] = access_token
-
     for k, v in params.iteritems():
         if hasattr(v, 'encode'):
             params[k] = v.encode('utf-8')
-
-    url = u'https://' + domain + u'.facebook.com' + path
+    url =  facebook_server + path
     params_encoded = encode_func(params)
     url = url + params_encoded
-    result = MyRequests.get(url).content
+    result = facebook_request.get(url).content
 
     return result
 
@@ -70,7 +84,10 @@ def fbapi_auth(code):
 
     result = fbapi_get_string(path=u"/oauth/access_token?", params=params,
                               encode_func=simple_dict_serialisation)
-    pairs = result.split("&", 1)
+    pairs = result.split("&")
+#    print "Pairs : " 
+#    print pairs
+
     result_dict = {}
     for pair in pairs:
         (key, value) = pair.split("=")
@@ -83,7 +100,7 @@ def fbapi_get_application_access_token(id):
         path=u"/oauth/access_token",
         params=dict(grant_type=u'client_credentials', client_id=id,
                     client_secret=app.config['FB_APP_SECRET']),
-        domain=u'graph')
+        )
 
     token = token.split('=')[-1]
     if not str(id) in token:
@@ -97,26 +114,31 @@ def fql(fql, token, args=None):
 
     args["query"], args["format"], args["access_token"] = fql, "json", token
 
-    url = "https://api.facebook.com/method/fql.query"
+    url = facebook_server + "/method/fql.query"
 
-    r = MyRequests.get(url, params=args)
+    r = facebook_request.get(url, params=args)
     return json.loads(r.content)
 
 
 def fb_call(call, args=None):
-    url = "https://graph.facebook.com/{0}".format(call)
-    r = MyRequests.get(url, params=args)
-    return json.loads(r.content)
+    url = graph_server + "/{0}".format(call)
+#    if (args is not None ) :
+#        print "args:" 
+#        print args
+    r = facebook_request.get(url, params=args)
+    content = r.content
+    print "got content  :" + content
+    return json.loads(content)
 
 
-
+print "creating app from %s \n" % __name__
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.config.from_object('conf.Config')
 
 
 def get_home():
-    return 'https://' + MyRequests.host + '/'
+    return 'https://' + facebook_request.host + '/'
 
 # collect all pages via json
 def get_all(name, args):
@@ -139,8 +161,8 @@ def get_all(name, args):
     return total
 
 def get_token():
-    if MyRequests.args.get('code', None):
-        return fbapi_auth(MyRequests.args.get('code'))[0]
+    if facebook_request.args.get('code', None):
+        return fbapi_auth(facebook_request.args.get('code'))[0]
     cookie_key = 'fbsr_{0}'.format(FB_APP_ID)
     if cookie_key in request.cookies:
         c = request.cookies.get(cookie_key)
@@ -163,7 +185,7 @@ def get_token():
             'code': data['code']
         }
         from urlparse import parse_qs
-        r = MyRequests.get('https://graph.facebook.com/oauth/access_token', params=params)
+        r = facebook_request.get( facebook_graph + '/oauth/access_token', params=params)
         token = parse_qs(r.content).get('access_token')
         return token
 
@@ -199,7 +221,7 @@ def discover_lat_lon(paramLat,paramLon,paramRange):
     return render_template('local.html', app=fb_app, app_id=FB_APP_ID, token=access_token, local=local, likes=likes, me=me, name=FB_APP_NAME)
 
 # find new pages not yet liked
-@app.route('/discover/name/<locationname>', methods=['GET', 'POST'])
+@app.route('/discover/name/<paramLocationName>', methods=['GET', 'POST'])
 def discover_name(paramLocationName):
     access_token = get_token()
     channel_url = url_for('get_channel', _external=True)
@@ -264,6 +286,7 @@ def likes():
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    print "Main\n"
     # print get_home()
     access_token = get_token()
     channel_url = url_for('get_channel', _external=True)
@@ -278,14 +301,14 @@ def index():
         photos = fb_call('me/photos',
                          args={'access_token': access_token, 'limit': 16})
         redir = get_home() + 'close/'
-        POST_TO_WALL = ("https://www.facebook.com/dialog/feed?redirect_uri=%s&"
+        POST_TO_WALL = (facebook_server + "/dialog/feed?redirect_uri=%s&"
                         "display=popup&app_id=%s" % (redir, FB_APP_ID))
         app_friends = fql(
             "SELECT uid, name, is_app_user, pic_square "
             "FROM user "
             "WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = me()) AND "
             "  is_app_user = 1", access_token)
-        SEND_TO = ('https://www.facebook.com/dialog/send?'
+        SEND_TO = (facebook_server + '/dialog/send?'
                    'redirect_uri=%s&display=popup&app_id=%s&link=%s'
                    % (redir, FB_APP_ID, get_home()))
         url = request.url
@@ -306,8 +329,9 @@ def close():
     return render_template('close.html')
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))
+    port = int(os.environ.get("PORT", 5001))
     if app.config.get('FB_APP_ID') and app.config.get('FB_APP_SECRET'):
-        app.run(host='0.0.0.0', port=port)
+        app.debug = True
+        app.run(host='127.0.0.1', port=port)
     else:
         print 'Cannot start application without Facebook App Id and Secret set'

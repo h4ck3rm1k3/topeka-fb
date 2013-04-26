@@ -1,0 +1,312 @@
+{
+  "data": [
+    {
+      "category": "Restaurant/cafe",
+      "category_list": [
+        {
+          "id": "187425207958280",
+          "name": "Burger Restaurant"
+        },
+        {
+          "id": "110107385737667",
+          "name": "New American Restaurant"
+        }
+      ],
+      "name": "Applebee's | Lawrence, KS",
+      "id": "186907817989315"
+    },
+    {
+      "category": "Bar",
+      "category_list": [
+        {
+          "id": "187425207958280",
+          "name": "Burger Restaurant"
+        },
+        {
+          "id": "180256082015845",
+          "name": "Pizza Place"
+        },
+        {
+          "id": "110290705711626",
+          "name": "Bar"
+        }
+      ],
+      "name": "The Wagon Wheel - Lawrence, KS",
+      "id": "115594591828247"
+    },
+    {
+      "category": "Arts/entertainment/nightlife",
+      "category_list": [
+        {
+          "id": "133436743388217",
+          "name": "Arts & Entertainment"
+        },
+        {
+          "id": "191478144212980",
+          "name": "Night Club"
+        }
+      ],
+      "name": "Club Magic (lawrence Ks)",
+      "id": "245804548865229"
+    },
+    {
+      "category": "Restaurant/cafe",
+      "category_list": [
+        {
+          "id": "212369748779358",
+          "name": "Tex-Mex Restaurant"
+        },
+        {
+          "id": "200742186618963",
+          "name": "Vegetarian & Vegan Restaurant"
+        },
+        {
+          "id": "199377230079198",
+          "name": "Mexican Restaurant"
+        }
+      ],
+      "name": "Fuzzy's Taco Shop - Lawrence, KS",
+      "id": "100255483409153"
+    },
+    {
+      "category": "City",
+      "category_list": [
+        {
+          "id": "224455390913969",
+          "name": "City"
+        }
+      ],
+      "name": "Lawrence, Kansas",
+      "id": "112577745421435"
+    },
+    {
+      "category": "Hotel",
+      "category_list": [
+        {
+          "id": "164243073639257",
+          "name": "Hotel"
+        },
+        {
+          "id": "191173027579272",
+          "name": "Wedding Planning"
+        }
+      ],
+      "name": "Holiday Inn Express Hotel & Suites Lawrence, KS",
+      "id": "127716170632333"
+    },
+    {
+      "category": "Product/service",
+      "name": "Lawrence KS App",
+      "id": "112536598765957"
+    },
+    {
+      "category": "Shopping/retail",
+      "category_list": [
+        {
+          "id": "178680352174443",
+          "name": "Toy Store"
+        }
+      ],
+      "name": "The Toy Store (Lawrence, KS)",
+      "id": "95348699374"
+    },
+    {
+      "category": "Local business",
+      "category_list": [
+        {
+          "id": "2500",
+          "name": "Local Business"
+        }
+      ],
+      "name": "FastFrame, Lawrence KS",
+      "id": "206065566099896"
+    },
+    {
+      "category": "Restaurant/cafe",
+      "category_list": [
+        {
+          "id": "187425207958280",
+          "name": "Burger Restaurant"
+        },
+        {
+          "id": "110107385737667",
+          "name": "New American Restaurant"
+        }
+      ],
+      "name": "Applebee's | Monterey, Lawrence, KS",
+      "id": "174056335961064"
+    },
+    {
+      "category": "University",
+      "category_list": [
+        {
+          "id": "108051929285833",
+          "name": "College & University"
+        },
+        {
+          "id": "365182493518892",
+          "name": "School"
+        }
+      ],
+      "name": "The University of Kansas",
+      "id": "44728562961"
+    },
+    {
+      "category": "Restaurant/cafe",
+      "category_list": [
+        {
+          "id": "273819889375819",
+          "name": "Restaurant"
+        },
+        {
+          "id": "215290398491661",
+          "name": "Frozen Yogurt Shop"
+        }
+      ],
+      "name": "3 Spoons Yogurt - Lawrence, KS",
+      "id": "124854224200460"
+    },
+    {
+      "category": "University",
+      "category_list": [
+        {
+          "id": "108051929285833",
+          "name": "College & University"
+        }
+      ],
+      "name": "HINU-Haskell of Lawrence,KS",
+      "id": "415276385201556"
+    },
+    {
+      "category": "Media/news/publishing",
+      "name": "Lawrence Vision: Alternative News Network for Lawrence, KS",
+      "id": "415944125139765"
+    },
+    {
+      "category": "Spas/beauty/personal care",
+      "category_list": [
+        {
+          "id": "139225689474222",
+          "name": "Spa, Beauty & Personal Care"
+        }
+      ],
+      "name": "Nails by Tracy, Lawrence, KS",
+      "id": "123087747727481"
+    },
+    {
+      "category": "Local business",
+      "category_list": [
+        {
+          "id": "193198380699462",
+          "name": "Repair Service"
+        },
+        {
+          "id": "155851681143483",
+          "name": "Jewelry Supplier"
+        },
+        {
+          "id": "188031587886173",
+          "name": "Jewelry Store"
+        }
+      ],
+      "name": "Marks Jewelers",
+      "id": "116720695028994"
+    },
+    {
+      "category": "Local business",
+      "category_list": [
+        {
+          "id": "183205338384747",
+          "name": "Discount Store"
+        }
+      ],
+      "name": "Social Service League of Lawrence, KS",
+      "id": "118475974869131"
+    },
+    {
+      "category": "Local business",
+      "category_list": [
+        {
+          "id": "199236533423806",
+          "name": "Beauty Salon"
+        },
+        {
+          "id": "185600691480842",
+          "name": "Tanning Salon"
+        }
+      ],
+      "name": "Ultimate Tan Lawrence, KS",
+      "id": "136896853008034"
+    },
+    {
+      "category": "Restaurant/cafe",
+      "category_list": [
+        {
+          "id": "128673187201735",
+          "name": "Coffee Shop"
+        },
+        {
+          "id": "192803624072087",
+          "name": "Fast Food Restaurant"
+        },
+        {
+          "id": "192108214153222",
+          "name": "Breakfast & Brunch Restaurant"
+        }
+      ],
+      "name": "Dunn Bros Coffee - Provisions Bakery Cafe - Lawrence, KS",
+      "id": "194174127290291"
+    },
+    {
+      "category": "Community",
+      "name": "Save Our SRS - Lawrence, KS",
+      "id": "160870813984598"
+    },
+    {
+      "category": "Company",
+      "name": "Just Between Friends, Lawrence KS",
+      "id": "251813772248"
+    },
+    {
+      "category": "Education",
+      "category_list": [
+        {
+          "id": "151676848220295",
+          "name": "Education"
+        }
+      ],
+      "name": "Lawrence Public Schools",
+      "id": "207952675960124"
+    },
+    {
+      "category": "Local business",
+      "name": "Remax Professionals Lawrence, KS",
+      "id": "117616084942792"
+    },
+    {
+      "category": "Neighborhood",
+      "category_list": [
+        {
+          "id": "206555552714503",
+          "name": "Neighborhood"
+        }
+      ],
+      "name": "East Lawrence, Lawrence, Kansas",
+      "id": "421456174586118"
+    },
+    {
+      "category": "Local business",
+      "category_list": [
+        {
+          "id": "152339818172592",
+          "name": "Insurance Agent"
+        }
+      ],
+      "name": "Justin T Moravec - American Family Insurance Agent - Lawrence, KS",
+      "id": "146815788778224"
+    }
+  ],
+  "paging": {
+    "next": "https://graph.facebook.com/search?q=Lawrence, KS&type=page&limit=25&offset=25&__after_id=146815788778224"
+  }
+}
