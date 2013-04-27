@@ -1,0 +1,639 @@
+{
+  "data": [
+    {
+      "category": "Restaurant/cafe",
+      "category_list": [
+        {
+          "id": "273819889375819",
+          "name": "Restaurant"
+        }
+      ],
+      "location": {
+        "street": "715 Massachusetts St.",
+        "city": "Lawrence",
+        "state": "KS",
+        "country": "United States",
+        "zip": "66044",
+        "latitude": 38.970698244175,
+        "longitude": -95.23607370545
+      },
+      "name": "715 Restaurant",
+      "id": "359918573011"
+    },
+    {
+      "category": "Restaurant/cafe",
+      "category_list": [
+        {
+          "id": "110290705711626",
+          "name": "Bar"
+        },
+        {
+          "id": "110107385737667",
+          "name": "New American Restaurant"
+        },
+        {
+          "id": "211155112228091",
+          "name": "Event Venue"
+        }
+      ],
+      "location": {
+        "street": "800 New Hampshire Street",
+        "city": "Lawrence",
+        "state": "KS",
+        "country": "United States",
+        "zip": "66044",
+        "latitude": 38.969346055535,
+        "longitude": -95.234444953682
+      },
+      "name": "Pachamamas Restaurant and Star Bar",
+      "id": "31451124120"
+    },
+    {
+      "category": "Restaurant/cafe",
+      "category_list": [
+        {
+          "id": "273819889375819",
+          "name": "Restaurant"
+        },
+        {
+          "id": "133436743388217",
+          "name": "Arts & Entertainment"
+        },
+        {
+          "id": "110290705711626",
+          "name": "Bar"
+        }
+      ],
+      "location": {
+        "street": "719 Massachusetts St.",
+        "city": "Lawrence",
+        "state": "KS",
+        "country": "United States",
+        "zip": "66044",
+        "latitude": 38.970482632126,
+        "longitude": -95.236074157891
+      },
+      "name": "Buffalo Bob's & the Dynamite Saloon",
+      "id": "154674471252759"
+    },
+    {
+      "category": "Restaurant/cafe",
+      "category_list": [
+        {
+          "id": "134501539950711",
+          "name": "Sushi Restaurant"
+        },
+        {
+          "id": "174201535963762",
+          "name": "Asian Fusion Restaurant"
+        },
+        {
+          "id": "150896171638138",
+          "name": "Korean Restaurant"
+        }
+      ],
+      "location": {
+        "street": "811 New Hampshire St",
+        "city": "Lawrence",
+        "state": "KS",
+        "country": "United States",
+        "zip": "66044-2739",
+        "latitude": 38.968960420123,
+        "longitude": -95.235013272075
+      },
+      "name": "Yokohama Sushi Downtown",
+      "id": "111820648855021"
+    },
+    {
+      "category": "Restaurant/cafe",
+      "category_list": [
+        {
+          "id": "273819889375819",
+          "name": "Restaurant"
+        },
+        {
+          "id": "144535972273084",
+          "name": "Brewery"
+        },
+        {
+          "id": "110290705711626",
+          "name": "Bar"
+        }
+      ],
+      "location": {
+        "street": "636 Massachusetts Street",
+        "city": "Lawrence",
+        "state": "KS",
+        "country": "United States",
+        "zip": "66044",
+        "latitude": 38.971683570025,
+        "longitude": -95.235700696349
+      },
+      "name": "The Free State Brewing Co.",
+      "id": "41155318809"
+    },
+    {
+      "category": "Restaurant/cafe",
+      "category_list": [
+        {
+          "id": "273819889375819",
+          "name": "Restaurant"
+        },
+        {
+          "id": "191173027579272",
+          "name": "Wedding Planning"
+        },
+        {
+          "id": "211155112228091",
+          "name": "Event Venue"
+        }
+      ],
+      "location": {
+        "street": "746 Massachusetts Street",
+        "city": "Lawrence",
+        "state": "KS",
+        "country": "United States",
+        "zip": "66044",
+        "latitude": 38.969500854079,
+        "longitude": -95.235714547437
+      },
+      "name": "Teller's Restaurant",
+      "id": "124166524287416"
+    },
+    {
+      "category": "Restaurant/cafe",
+      "category_list": [
+        {
+          "id": "200742186618963",
+          "name": "Vegetarian & Vegan Restaurant"
+        },
+        {
+          "id": "212285478786733",
+          "name": "Hot Dog Joint"
+        },
+        {
+          "id": "187425207958280",
+          "name": "Burger Restaurant"
+        }
+      ],
+      "location": {
+        "street": "803 Massachusetts",
+        "city": "Lawrence",
+        "state": "KS",
+        "country": "United States",
+        "zip": "66044",
+        "latitude": 38.969307734959,
+        "longitude": -95.23608090051
+      },
+      "name": "The Burger Stand at The Casbah",
+      "id": "124187997603273"
+    },
+    {
+      "category": "Restaurant/cafe",
+      "category_list": [
+        {
+          "id": "149803325077018",
+          "name": "American Restaurant"
+        },
+        {
+          "id": "110290705711626",
+          "name": "Bar"
+        }
+      ],
+      "location": {
+        "street": "701 Massachusetts St",
+        "city": "Lawrence",
+        "state": "KS",
+        "country": "United States",
+        "zip": "66044-2345",
+        "latitude": 38.971138251675,
+        "longitude": -95.236089033951
+      },
+      "name": "The Jayhawker at The Eldridge",
+      "id": "121133691233853"
+    },
+    {
+      "category": "Local business",
+      "category_list": [
+        {
+          "id": "192831537402299",
+          "name": "Family Style Restaurant"
+        },
+        {
+          "id": "134501539950711",
+          "name": "Sushi Restaurant"
+        }
+      ],
+      "location": {
+        "street": "740 Massachusetts St",
+        "city": "Lawrence",
+        "state": "KS",
+        "country": "United States",
+        "zip": "66044-2344",
+        "latitude": 38.969588460017,
+        "longitude": -95.235774964537
+      },
+      "name": "Wa Restaurant",
+      "id": "117728078254037"
+    },
+    {
+      "category": "Local business",
+      "category_list": [
+        {
+          "id": "199377230079198",
+          "name": "Mexican Restaurant"
+        }
+      ],
+      "location": {
+        "street": "815 New Hampshire St.",
+        "city": "Lawrence",
+        "state": "KS",
+        "country": "United States",
+        "zip": "66044",
+        "latitude": 38.968801118574,
+        "longitude": -95.234990401169
+      },
+      "name": "Cielito Lindo Mexican Restaurant",
+      "id": "126097497424942"
+    },
+    {
+      "category": "Movie theater",
+      "category_list": [
+        {
+          "id": "150432221681325",
+          "name": "DVD & Video Store"
+        },
+        {
+          "id": "192511100766680",
+          "name": "Movie Theatre"
+        },
+        {
+          "id": "179943432047564",
+          "name": "Concert Venue"
+        }
+      ],
+      "location": {
+        "street": "644 Massachusetts St.",
+        "city": "Lawrence",
+        "state": "KS",
+        "country": "United States",
+        "zip": "66044",
+        "latitude": 38.971443483957,
+        "longitude": -95.235707910835
+      },
+      "name": "Liberty Hall",
+      "id": "159570731487"
+    },
+    {
+      "category": "Restaurant/cafe",
+      "category_list": [
+        {
+          "id": "199377230079198",
+          "name": "Mexican Restaurant"
+        },
+        {
+          "id": "197871390225897",
+          "name": "Cafe"
+        }
+      ],
+      "location": {
+        "street": "733 New Hampshire St",
+        "city": "Lawrence",
+        "state": "KS",
+        "country": "United States",
+        "zip": "66044",
+        "latitude": 38.970059693576,
+        "longitude": -95.234938879004
+      },
+      "name": "La Familia Cafe & Cantina",
+      "id": "131582553540232"
+    },
+    {
+      "category": "Restaurant/cafe",
+      "category_list": [
+        {
+          "id": "187425207958280",
+          "name": "Burger Restaurant"
+        },
+        {
+          "id": "163300367054197",
+          "name": "Seafood Restaurant"
+        },
+        {
+          "id": "192831537402299",
+          "name": "Family Style Restaurant"
+        }
+      ],
+      "location": {
+        "street": "743 Massachusetts Street",
+        "city": "Lawrence",
+        "state": "KS",
+        "country": "United States",
+        "zip": "66044",
+        "latitude": 38.969612885222,
+        "longitude": -95.236028633602
+      },
+      "name": "Jefferson's Lawrence",
+      "id": "172362766151678"
+    },
+    {
+      "category": "Restaurant/cafe",
+      "category_list": [
+        {
+          "id": "192242714144170",
+          "name": "Latin American Restaurant"
+        },
+        {
+          "id": "199377230079198",
+          "name": "Mexican Restaurant"
+        }
+      ],
+      "location": {
+        "street": "814 Massachusetts Street",
+        "city": "Lawrence",
+        "state": "KS",
+        "country": "United States",
+        "zip": "66044",
+        "latitude": 38.968766281853,
+        "longitude": -95.235891753875
+      },
+      "name": "La Parrilla",
+      "id": "109359900187"
+    },
+    {
+      "category": "Local business",
+      "category_list": [
+        {
+          "id": "193831710644458",
+          "name": "Italian Restaurant"
+        },
+        {
+          "id": "144722595590046",
+          "name": "Greek Restaurant"
+        }
+      ],
+      "location": {
+        "street": "907 Massachusetts Street",
+        "city": "Lawrence",
+        "state": "KS",
+        "country": "United States",
+        "zip": "66044",
+        "latitude": 38.967143339707,
+        "longitude": -95.235845873701
+      },
+      "name": "The Mad Greek",
+      "id": "102720303104013"
+    },
+    {
+      "category": "Book store",
+      "category_list": [
+        {
+          "id": "197384240287028",
+          "name": "Art Gallery"
+        },
+        {
+          "id": "197048876974331",
+          "name": "Book Store"
+        },
+        {
+          "id": "197871390225897",
+          "name": "Cafe"
+        }
+      ],
+      "location": {
+        "street": "722 Massachusetts St.",
+        "city": "Lawrence",
+        "state": "KS",
+        "country": "United States",
+        "zip": "66044",
+        "latitude": 38.970405722296,
+        "longitude": -95.235909295994
+      },
+      "name": "Signs of Life",
+      "id": "98820439467"
+    },
+    {
+      "category": "Hotel",
+      "category_list": [
+        {
+          "id": "165679780146824",
+          "name": "Food & Restaurant"
+        },
+        {
+          "id": "164243073639257",
+          "name": "Hotel"
+        }
+      ],
+      "location": {
+        "street": "701 Massachusetts",
+        "city": "Lawrence",
+        "state": "KS",
+        "country": "United States",
+        "zip": "66044",
+        "latitude": 38.971118834589,
+        "longitude": -95.236129709828
+      },
+      "name": "The Eldridge Hotel",
+      "id": "113113891403"
+    },
+    {
+      "category": "Restaurant/cafe",
+      "category_list": [
+        {
+          "id": "179167895459033",
+          "name": "Thai Restaurant"
+        },
+        {
+          "id": "174201535963762",
+          "name": "Asian Fusion Restaurant"
+        }
+      ],
+      "location": {
+        "street": "811 Massachusetts Street",
+        "city": "Lawrence",
+        "state": "KS",
+        "country": "United States",
+        "zip": "66044",
+        "latitude": 38.968904190884,
+        "longitude": -95.236177418108
+      },
+      "name": "Zen Zero",
+      "id": "40205034098"
+    },
+    {
+      "category": "Local business",
+      "category_list": [
+        {
+          "id": "110290705711626",
+          "name": "Bar"
+        },
+        {
+          "id": "150534008338515",
+          "name": "Barbecue Restaurant"
+        },
+        {
+          "id": "133436743388217",
+          "name": "Arts & Entertainment"
+        }
+      ],
+      "location": {
+        "street": "1012 Massachusetts St",
+        "city": "Lawrence",
+        "state": "KS",
+        "country": "United States",
+        "zip": "66044-3061",
+        "latitude": 38.965191841057,
+        "longitude": -95.235707643182
+      },
+      "name": "Buffalo Wild Wings",
+      "id": "116433841714151"
+    },
+    {
+      "category": "Restaurant/cafe",
+      "category_list": [
+        {
+          "id": "174201535963762",
+          "name": "Asian Fusion Restaurant"
+        }
+      ],
+      "location": {
+        "street": "1007 Massachusetts Street",
+        "city": "Lawrence",
+        "state": "KS",
+        "country": "United States",
+        "zip": "66044",
+        "latitude": 38.9655,
+        "longitude": -95.23594
+      },
+      "name": "EncoreCafe",
+      "id": "120832251316402"
+    },
+    {
+      "category": "Bar",
+      "category_list": [
+        {
+          "id": "133436743388217",
+          "name": "Arts & Entertainment"
+        },
+        {
+          "id": "162480900474637",
+          "name": "Dive Bar"
+        }
+      ],
+      "location": {
+        "street": "17 East 8th Street",
+        "city": "Lawrence",
+        "state": "KS",
+        "country": "United States",
+        "zip": "66044",
+        "latitude": 38.969404976176,
+        "longitude": -95.235044777316
+      },
+      "name": "The Sandbar",
+      "id": "6108839789"
+    },
+    {
+      "category": "Restaurant/cafe",
+      "category_list": [
+        {
+          "id": "110290705711626",
+          "name": "Bar"
+        },
+        {
+          "id": "218693881483234",
+          "name": "Pub"
+        },
+        {
+          "id": "187425207958280",
+          "name": "Burger Restaurant"
+        }
+      ],
+      "location": {
+        "street": "623 Vermont St",
+        "city": "Lawrence",
+        "state": "KS",
+        "country": "United States",
+        "zip": "66044",
+        "latitude": 38.972237583517,
+        "longitude": -95.237309097331
+      },
+      "name": "Dempsey's",
+      "id": "116941125066"
+    },
+    {
+      "category": "Book store",
+      "category_list": [
+        {
+          "id": "194127957280024",
+          "name": "Vintage Store"
+        },
+        {
+          "id": "197048876974331",
+          "name": "Book Store"
+        }
+      ],
+      "location": {
+        "street": "708 Massachusetts Street",
+        "city": "Lawrence",
+        "state": "KS",
+        "country": "United States",
+        "zip": "66044",
+        "latitude": 38.970901269694,
+        "longitude": -95.235849634109
+      },
+      "name": "The Dusty Bookshelf",
+      "id": "10808724975"
+    },
+    {
+      "category": "Food/beverages",
+      "category_list": [
+        {
+          "id": "187827497907070",
+          "name": "Bakery"
+        },
+        {
+          "id": "325310894151007",
+          "name": "Cupcake Shop"
+        },
+        {
+          "id": "187153754656815",
+          "name": "Dessert Restaurant"
+        }
+      ],
+      "location": {
+        "street": "727 Massachusetts St.",
+        "city": "Lawrence",
+        "state": "KS",
+        "country": "United States",
+        "zip": "66044",
+        "latitude": 38.9702540124,
+        "longitude": -95.236063919679
+      },
+      "name": "Cupcake Construction Company",
+      "id": "269461076838"
+    },
+    {
+      "category": "Local business",
+      "category_list": [
+        {
+          "id": "273819889375819",
+          "name": "Restaurant"
+        }
+      ],
+      "location": {
+        "street": "8 W. 8th St.",
+        "city": "Lawrence",
+        "state": "KS",
+        "country": "United States",
+        "zip": "66044",
+        "latitude": 38.969517749728,
+        "longitude": -95.236097196452
+      },
+      "name": "Noodles & Co.",
+      "id": "174099569278316"
+    }
+  ],
+  "paging": {
+    "next": "https://graph.facebook.com/search?type=place&center=38.970645,-95.235959&distance=10000&limit=25&offset=25&__after_id=174099569278316"
+  }
+}

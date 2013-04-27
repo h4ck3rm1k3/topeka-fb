@@ -33,6 +33,17 @@ def graph_search():
     print "graph search Request Data:"
     if ('__after_id' in request.args) :
         return "{}"        
+
+#distance=10000&type=place&center=38.970645,-95.235959
+    if ('distance' in request.args) :        
+        qtype=  urllib2.unquote(request.args['type'])
+        qcenter= urllib2.unquote(request.args['center'])
+        qdistance= urllib2.unquote(request.args['distance'])
+        filename = 'cache/search_page_latlon.json'
+        print "graph search Request Data:" + filename
+        f = open(filename, 'r')
+        return f.read()
+
     if ('type' in request.args) :
         qtype=  urllib2.unquote(request.args['type'])
         qval= urllib2.unquote(request.args['q'])

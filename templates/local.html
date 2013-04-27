@@ -20,6 +20,7 @@
     <meta property="og:description" content="My First App" />
     <meta content="{{app_id}}" property="fb:app_id" />
 
+    
     <script type="text/javascript" src="/static/jquery-1.7.1.min.js"></script>
        <script type="text/javascript">
       function logResponse(response) {
@@ -116,7 +117,6 @@
       }(document, 'script', 'facebook-jssdk'));
     </script>
 
-
   <!-- By passing a valid access token here, we are able to display -->
   <!-- the user's images without having to download or prepare -->
   <!-- them ahead of time -->
@@ -167,6 +167,7 @@
             {{location.location.street}}( {{location.location.latitude}}, {{location.location.longitude}})
 	  {% endif  %}
           </a>
+	  <div class="fb-like" data-href="http://www.facebook.com/{{location.id}}" data-send="true" data-width="450" data-show-faces="true"></div>
           </li>
 	  {% endif  %} 
 {% endfor %}</ul>
