@@ -268,7 +268,7 @@ def osm_export(paramName):
         newid = newid -1
         if ('location' in d):
             local2 = local2 + [d]
-    return render_template('osm.html', local=local2)
+    return render_template('osm.xml', local=local2)
 
 # export likes to an osm file
 @app.route('/likes/export/osm', methods=['GET', 'POST'])
