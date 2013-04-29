@@ -348,9 +348,7 @@ def likes():
     channel_url = url_for('get_channel', _external=True)
     channel_url = channel_url.replace('http:', '').replace('https:', '')
     if access_token:
-        likes= get_all('me/likes', {'access_token': access_token})
         me = fb_call('me', args={'access_token': access_token})
-
         # get my location
         print "going to get my_location\n" 
         my_location= get_current_latlon(access_token)
@@ -361,7 +359,7 @@ def likes():
         local= get_all('me/likes', {
                 'access_token': access_token,  
                 'fields' :  'id,name,link,location,website,username,phone' })
-        return render_template('likes.html',  local=local , me=me, app=fb_app, likes=likes, my_location=my_location )
+        return render_template('likes.html',   me=me, app=fb_app, likes=local, my_location=my_location )
     else:
         return render_template('login.html', app_id=FB_APP_ID, token=access_token, url=request.url, channel_url=channel_url, name=FB_APP_NAME)
 
