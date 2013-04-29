@@ -79,7 +79,6 @@ def fbapi_get_string(path,
     result = facebook_request.get(url).content
     return result
 
-
 def fbapi_auth(code):
     print "fbapi_auth: %s\n" % code
     params = {'client_id': app.config['FB_APP_ID'],
@@ -129,8 +128,6 @@ def fb_call(call, args=None):
     print "got content  :" + content
     return json.loads(content)
 
-
-
 def get_home():
     return 'https://' + request.host + '/'
 
@@ -156,14 +153,11 @@ def get_all(name, args):
 
 def get_token():
     print "get_token\n"
-    print "Args:" , request.args
-    
+    print "Args:" , request.args    
     if 'RUN_LOCALLY_OUTSIDE_HEROKU' in os.environ:
-        return fbapi_auth("1234")[0]
-    
+        return fbapi_auth("1234")[0]    
     if request.args.get('code', None):
         return fbapi_auth(facebook_request.args.get('code'))[0]
-
     cookie_key = 'fbsr_{0}'.format(FB_APP_ID)
     if cookie_key in request.cookies:
         c = request.cookies.get(cookie_key)
@@ -190,6 +184,7 @@ def get_token():
         token = parse_qs(r.content).get('access_token')
         return token
 
+
 # find by lat lon
 @app.route('/discover/ll/<paramLat>/<paramLon>/<paramRange>', methods=['GET', 'POST'])      
 def discover_lat_lon(paramLat,paramLon,paramRange):
@@ -207,7 +202,9 @@ def discover_lat_lon(paramLat,paramLon,paramRange):
                 'access_token': access_token,
                 'type'  : 'place',
                 'center' : paramLat + ',' + paramLon ,
-                'distance': paramRange
+                'distance': paramRange,
+                'fields': 'description,id,name,link,location,website,username,phone'
+                
                 })                    
         for d in local:
             d['online']=1
@@ -226,25 +223,27 @@ def discover_lat_lon(paramLat,paramLon,paramRange):
 def discover_name(paramLocationName):
     print "discover_name:%s\n" % paramLocationName
     access_token = get_token()
-
     channel_url = url_for('get_channel', _external=True)
     channel_url = channel_url.replace('http:', '').replace('https:', '')
     local = []
     likes = {} # hash of likes
-
     print "access token: %s " % access_token
-
     if access_token:
         me = fb_call('me', args={'access_token': access_token})
         likesd= get_all('me/likes', {'access_token': access_token})
         for l in likesd:
             likes[l['id']]=l['name']
-        local = get_all('search', { 'access_token': access_token, 'type'  : 'page',   'q' : paramLocationName })
+        local = get_all('search', { 
+                'access_token': access_token, 
+                'type'  : 'page',   
+                'q' : paramLocationName ,
+                'fields': 'description,id,name,link,location,website,username,phone'
+
+})
         for d in local:
             d['online']=1
     else:
         return render_template('login.html', app_id=FB_APP_ID, token=access_token, url=request.url, channel_url=channel_url, name=FB_APP_NAME)
-
     for d in local:
         if d['id'] in likes :
             d['liked']=1
@@ -253,14 +252,35 @@ def discover_name(paramLocationName):
     fb_app = fb_call(FB_APP_ID, args={'access_token': access_token})
     return render_template('local.html', app=fb_app, app_id=FB_APP_ID, token=access_token, local=local, likes=likes, me=me, name=FB_APP_NAME)
 
+# export by lat lon
+@app.route('/discover/ll/<paramLat>/<paramLon>/<paramRange>/export/osm', methods=['GET'])      
+def export_lat_lon(paramLat,paramLon,paramRange):
+    access_token = get_token()
+    local = get_all('search', {
+            'access_token': access_token,
+            'type'  : 'place',
+            'center' : paramLat + ',' + paramLon ,
+            'distance': paramRange,
+            'fields': 'description,id,name,link,location,website,username,phone'
+
+            })                    
+    newid = -1
+    local2=[]
+    for d in local:
+        d['osmid'] = newid
+        newid = newid -1
+        if ('location' in d):
+            local2 = local2 + [d]
+    return render_template('osm.xml', local=local2, name=FB_APP_NAME)
+
 # export locals to osm
 @app.route('/local/export/osm/<paramName>', methods=['GET', 'POST'])
 def osm_export(paramName):
     local = get_all('search', { 
-                                'type'  : 'page',   
-                                'q' : paramName ,
-                                'fields' :  'id,name,location,website,phone'
-                                })
+            'type'  : 'page',   
+            'q' : paramName ,
+            'fields' :  'description,id,name,link,location,website,username,phone'
+            })
     newid = -1
     local2=[]
     for d in local:
@@ -280,16 +300,76 @@ def likes():
         newid = -1
         local2=[]
         # find all the liked pages
-        local= get_all('me/likes', {'access_token': access_token,  'fields' :  'id,name,location,website' })
+        local= get_all('me/likes', {
+                'access_token': access_token,  
+                'fields' :  'id,name,link,location,website,username,phone' })
         newid = -1
         for d in local:
             d['osmid'] = newid
             newid = newid -1
             if ('location' in d):
                 local2 = local2 + [d]
-        return render_template('osm.html',  local=local2 )
+        return render_template('osm.xml',  local=local2 )
     else:
         return render_template('login.html', app_id=FB_APP_ID, token=access_token, url=request.url, channel_url=channel_url, name=FB_APP_NAME)
+
+
+
+
+def get_location_latlon(id):
+    url = "%s/%d" % (graph_server,id)
+    content=facebook_request.get(url ).content
+    print content
+    location = json.loads(content)    
+    return location
+    
+def get_current_location(access_token):
+    #fql?q=
+    location_object = fql(
+        "SELECT current_location FROM user WHERE uid=me()", access_token)
+    return location_object
+
+def get_current_latlon(access_token):
+    # get the id
+    loc = get_current_location(access_token)
+#    print "loc",loc
+#    print "loc.data",loc['data']
+#    print "loc.data[0]",loc['data'][0]
+#    print  "loc.data[0][current_location]",loc['data'][0]['current_location']
+    locid =loc['data'][0]['current_location']['id']
+    latlon = get_location_latlon(locid)
+    print "latlon", latlon
+    return latlon[ 'location'] 
+    #{
+    #"data": [
+    #{
+    #  "current_location": {id
+
+    
+# show likes 
+@app.route('/likes', methods=['GET'])
+def likes():
+    access_token = get_token()
+    channel_url = url_for('get_channel', _external=True)
+    channel_url = channel_url.replace('http:', '').replace('https:', '')
+    if access_token:
+        likes= get_all('me/likes', {'access_token': access_token})
+        me = fb_call('me', args={'access_token': access_token})
+
+        # get my location
+        print "going to get my_location\n" 
+        my_location= get_current_latlon(access_token)
+        print "my_location",my_location, "\n"
+        #get the latlon : https://graph.facebook.com/$ID
+
+        fb_app = fb_call(FB_APP_ID, args={'access_token': access_token})
+        local= get_all('me/likes', {
+                'access_token': access_token,  
+                'fields' :  'id,name,link,location,website,username,phone' })
+        return render_template('likes.html',  local=local , me=me, app=fb_app, likes=likes, my_location=my_location )
+    else:
+        return render_template('login.html', app_id=FB_APP_ID, token=access_token, url=request.url, channel_url=channel_url, name=FB_APP_NAME)
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -334,7 +414,6 @@ def get_channel():
 @app.route('/close/', methods=['GET', 'POST'])
 def close():
     return render_template('close.html')
-
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))

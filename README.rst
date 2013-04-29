@@ -3,7 +3,20 @@ Facebook/Heroku Lawrence App -- Python
 
 Lawrence Kansas app for all things Lawrence. 
 
+(but you will be able to use this for any location)
+
+
+Testing facebook
+====================================
+An important part of this app is the offline testing mode, it allows you to test without facebook.
+in the cache/ directory you place json files. If there is a .private file it will be loaded first.
+
+The program facebookserver.py implements the limited api that the program facebookgeoapp.py calls into. 
+
+
 Ideas for the app :
+====================================
+
 
 Openstreetmap map of the city
 

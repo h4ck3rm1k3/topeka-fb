@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:fb="http://ogp.me/ns/fb#" lang="en">
   <head>
+<!-- leaflet begin -->
+ <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.css" />
+ <!--[if lte IE 8]>
+     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.ie.css" />
+ <![endif]-->
+ <script src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script> 
+<!-- <script src="static/leaflet.js"></script> -->
+<!-- leaflet end -->
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes" />
 
@@ -19,6 +28,7 @@
     <meta content="" property="og:site_name" />
     <meta property="og:description" content="My First App" />
     <meta content="{{app_id}}" property="fb:app_id" />
+
 
     <script type="text/javascript" src="/static/jquery-1.7.1.min.js"></script>
        <script type="text/javascript">
@@ -77,10 +87,33 @@
       });
     </script>
 
+       <script type="text/javascript">
+
+</script>
+
+<!--
+-->
+  <!-- 
+       u'latitude': 39.0392, 
+       u'longitude': -95.6895
+ -->
+
 
   </head>
   <body>
+    <div id="map" style="width: 600px; height: 400px"></div>
+	<script src="static/leaflet.js"></script>
+	<script>
+	  var map = L.map('map').setView([
+	  {{my_location.latitude}},{{my_location.longitude}}
+	  ], 13);
+	  L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	  maxZoom: 18,
+	  attribution: 'Map data © OpenStreetMap contributors'
+	  }).addTo(map);
+	  
 
+	</script>
 
       <script type="text/javascript">
       window.fbAsyncInit = function() {
@@ -122,8 +155,15 @@
   <!-- them ahead of time -->
   <p id="picture" style="background-image: url(https://graph.facebook.com/me/picture?type=normal&access_token={{token}})"></p>
 
+
+
+
+
   <div>
     <h1>Welcome, <strong>{{me.name}}</strong></h1>
+    <h1>Your Location is: <strong>{{my_location.latitude}},{{my_location.longitude}} </strong></h1>
+
+
     <p class="tagline">
       This is the Lawrence app :
       <a href="{{app.link}}">{{app.name}}</a>
@@ -150,9 +190,10 @@
     </div>
   </div>
 
+
+
       <h1>Likes </h1>
       <div class="list">
-        <h3>locations near Lawrence</h3>
         <ul class="locations">{% for location in likes %}
           <li>
           <a href="http://www.facebook.com/{{location.id}}">
@@ -161,17 +202,20 @@
             count :{{location.count}}
 	  {% if  location.location  %}
             {{location.location.street}}( {{location.location.latitude}}, {{location.location.longitude}})
+
+	    <script>
+	      var marker = L.marker([ {{location.location.latitude}}, {{location.location.longitude}}]).addTo(map);
+              htmlString ='<a href="http://www.facebook.com/{{location.id}}"><img src="https://graph.facebook.com/{{location.id}}/picture" alt="{{location.name}}"> {{location.name}} count :{{location.count}}</a>'
+	      marker.bindPopup(htmlString);
+	    </script>
 	  {% endif  %}
           </a>
-	  <div class="fb-like" data-href="http://www.facebook.com/{{location.id}}" data-send="true" data-width="450" data-show-faces="true"></div>
+
+
 
           </li>
-
 {% endfor %}</ul>
       </div>
-
-
-
   </body>
 </html>
 

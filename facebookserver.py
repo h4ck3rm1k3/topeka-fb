@@ -12,21 +12,32 @@ def oauth_access_token() :
     #?code=name&client_secret=12345&redirect_uri=https://127.0.0.1/&method=GET&client_id=123
     return "a=b&access_token=123&expires=123"
 
-@app.route("/graph/<appid>")
-def app_config(appid):
-    return "{ \n \"name\" : \"some random app\", \n \"app_id\" : \"" + appid + "\"\n}"
+
+def getdata(name) :
+    print  "Requested:%s\n" % name
+    try:
+        filename = 'cache/'+ name +'.json.private'
+        f = open(filename, 'r')
+        print  "Opened:%s\n" % filename
+    except IOError:
+        filename = 'cache/'+ name +'.json'
+        f = open(filename, 'r')
+        print  "Opened:%s\n" % filename
+    return f.read()
+
+
+@app.route("/graph/me")
+def graph_me():
+    return getdata('me')
 
 @app.route("/graph/me/likes")
 def graph_me_likes():
-#    return "{ \n}"
-    f = open('cache/mylikes.json', 'r')
-    return f.read()
+    return getdata('mylikes')
 
 @app.route("/graph/me/friends")
 def graph_me_friends():
-#    return "{ \n}"
-    f = open('cache/myfriends.json', 'r')
-    return f.read()
+    return getdata('myfriends')
+
 
 @app.route("/graph/search")
 def graph_search():
@@ -39,10 +50,8 @@ def graph_search():
         qtype=  urllib2.unquote(request.args['type'])
         qcenter= urllib2.unquote(request.args['center'])
         qdistance= urllib2.unquote(request.args['distance'])
-        filename = 'cache/search_page_latlon.json'
-        print "graph search Request Data:" + filename
-        f = open(filename, 'r')
-        return f.read()
+        return getdata('search_page_latlon')
+
 
     if ('type' in request.args) :
         qtype=  urllib2.unquote(request.args['type'])
@@ -52,22 +61,34 @@ def graph_search():
         print  "qtype:" +        qtype +  " qval:"+       qval
         if ((qtype is None) or (qval is None) )   :
             return "{}"       
-        filename = 'cache/search_' + qtype + "_" +  qval + '.json'
-        print "graph search Request Data:" + filename
-        f = open(filename, 'r')
-        return f.read()
+        filename = 'search_' + qtype + "_" +  qval 
+        return getdata(filename)
+
     return "{ \"unknown\" : \"\1\" }"        
 
 @app.route("/graph/me/photos")
 def graph_me_photos():
-    f = open('cache/myphotos.json', 'r')
-    return f.read()
+    getdata('myphotos.json')
+
 
 @app.route("/api/method/fql.query")
 def fb_method_fql_query():
     print "fql query Request Data:"
     print request.args
+
+    if (request.args['query'] =='SELECT current_location FROM user WHERE uid=me()'):
+        filename = 'current_location'
+        return getdata(filename)
+
+
     return "{}"
+
+@app.route("/graph/<appid>")
+def app_config(appid):
+    filename = 'id_lookup_%s' % appid
+    print "graph id lookup:" + filename
+    return getdata(filename)
+
 
 if __name__ == "__main__":
     app.debug = True
