@@ -1,5 +1,4 @@
-{
-  "data": [
+[
     {
       "current_location": {
         "city": "Topeka",
@@ -11,4 +10,3 @@
       }
     }
   ]
-}

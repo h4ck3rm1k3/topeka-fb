@@ -334,9 +334,9 @@ def get_current_latlon(access_token):
     loc = get_current_location(access_token)
 #    print "loc",loc
 #    print "loc.data",loc['data']
-#    print "loc.data[0]",loc['data'][0]
-#    print  "loc.data[0][current_location]",loc['data'][0]['current_location']
-    locid =loc['data'][0]['current_location']['id']
+    print "loc[0]",loc[0]
+    print  "loc[0][current_location]",loc[0]['current_location']
+    locid =loc[0]['current_location']['id']
     latlon = get_location_latlon(locid)
     print "latlon", latlon
     return latlon[ 'location'] 
