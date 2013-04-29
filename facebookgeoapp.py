@@ -88,8 +88,6 @@ def fbapi_auth(code):
     result = fbapi_get_string(path=u"/oauth/access_token?", params=params,
                               encode_func=simple_dict_serialisation)
     pairs = result.split("&")
-#    print "Pairs : " 
-#    print pairs
     result_dict = {}
     for pair in pairs:
         (key, value) = pair.split("=")
@@ -120,12 +118,9 @@ def fql(fql, token, args=None):
 def fb_call(call, args=None):
     print "fb_call: %s\n" % call
     url = graph_server + "/{0}".format(call)
-#    if (args is not None ) :
-#        print "args:" 
-#        print args
     r = facebook_request.get(url, params=args)
     content = r.content
-    print "got content  :" + content
+#    print "got content  :" + content
     return json.loads(content)
 
 def get_home():
@@ -153,7 +148,7 @@ def get_all(name, args):
 
 def get_token():
     print "get_token\n"
-    print "Args:" , request.args    
+#    print "Args:" , request.args    
     if 'RUN_LOCALLY_OUTSIDE_HEROKU' in os.environ:
         return fbapi_auth("1234")[0]    
     if request.args.get('code', None):

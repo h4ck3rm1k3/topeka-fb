@@ -68,7 +68,7 @@ def graph_search():
 
 @app.route("/graph/me/photos")
 def graph_me_photos():
-    getdata('myphotos.json')
+    return getdata('myphotos')
 
 
 @app.route("/api/method/fql.query")
